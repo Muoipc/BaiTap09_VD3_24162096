@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trang chủ - IOTSTAR SHOP (Ví dụ 3)</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container">
+    <div class="page-title">
+        <div>
+            <h1>Bài Tập 09 - Ví Dụ 3</h1>
+            <p class="subtitle">Hệ thống Spring Boot + Security + OTP Mail + Quản lý User (1) - Product (N)</p>
+        </div>
+        <div class="student-info">
+            <div><strong>SV:</strong> Nguyễn Song Hoàng Phúc</div>
+            <div><strong>MSSV:</strong> 24162096 | <strong>Lớp:</strong> WEBPR330479</div>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon user-icon">👥</div>
+            <div class="stat-info">
+                <h3>Tổng số Người dùng</h3>
+                <div class="stat-number" th:text="${userCount}">0</div>
+                <a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">Quản lý Users &rarr;</a>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon prod-icon">📦</div>
+            <div class="stat-info">
+                <h3>Tổng số Sản phẩm</h3>
+                <div class="stat-number" th:text="${productCount}">0</div>
+                <a th:href="@{/products}">Quản lý Products &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" style="margin-top: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Sản phẩm nổi bật trong hệ thống</h2>
+            <a class="btn primary" th:href="@{/products}">Xem tất cả sản phẩm</a>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card" th:each="p : ${products}">
+                <div class="product-thumb">
+                    <img th:src="${p.imageUrl}" alt="Product">
+                </div>
+                <div class="product-body">
+                    <h4 th:text="${p.name}">Tên sản phẩm</h4>
+                    <p class="product-desc" th:text="${p.description}">Mô tả</p>
+                    <div class="product-price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</div>
+                    <div class="product-owner">
+                        <span>Đăng bởi:</span> <strong th:text="${p.userFullName != null ? p.userFullName : p.username}"></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

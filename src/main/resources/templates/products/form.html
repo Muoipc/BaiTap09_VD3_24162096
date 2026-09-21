@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${mode == 'create' ? 'Thêm Sản phẩm' : 'Sửa Sản phẩm'}">Form Product</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container narrow">
+    <div class="page-title">
+        <div>
+            <h1 th:text="${mode == 'create' ? 'Thêm Sản phẩm mới' : 'Chỉnh sửa Sản phẩm #' + productDTO.id}"></h1>
+            <p class="subtitle">Quản lý thông tin chi tiết và người sở hữu sản phẩm</p>
+        </div>
+        <div>
+            <a class="btn secondary" th:href="@{/products}">Quay lại</a>
+        </div>
+    </div>
+
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <div class="card">
+        <form th:action="${mode == 'create' ? '/products/create' : '/products/edit/' + productDTO.id}"
+              th:object="${productDTO}"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="name">Tên sản phẩm (*)</label>
+                <input type="text" id="name" th:field="*{name}" required placeholder="Ví dụ: iPhone 16 Pro Max">
+            </div>
+
+            <div class="form-group">
+                <label for="price">Đơn giá (VNĐ) (*)</label>
+                <input type="number" id="price" th:field="*{price}" required min="0" step="1000" placeholder="30000000">
+            </div>
+
+            <div class="form-group">
+                <label for="userId">Người sở hữu (User) (*)</label>
+                <select id="userId" th:field="*{userId}" required>
+                    <option th:each="u : ${usersList}" th:value="${u.id}" th:text="${u.fullName} + ' (' + ${u.username} + ')'"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Upload File Hình ảnh</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label for="imageUrl">Hoặc nhập trực tiếp URL hình ảnh</label>
+                <input type="text" id="imageUrl" th:field="*{imageUrl}" placeholder="https://...">
+            </div>
+
+            <div class="form-group" th:if="${productDTO.imageUrl != null}">
+                <label>Ảnh hiện tại:</label>
+                <div style="margin-top: 5px;">
+                    <img th:src="${productDTO.imageUrl}" alt="Preview" style="max-height: 100px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Mô tả chi tiết</label>
+                <textarea id="description" th:field="*{description}" rows="4" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;"></textarea>
+            </div>
+
+            <button type="submit" class="btn primary full" th:text="${mode == 'create' ? 'Tạo mới Sản phẩm' : 'Lưu cập nhật'}"></button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

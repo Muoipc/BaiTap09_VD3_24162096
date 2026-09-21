@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>403 - Từ chối truy cập</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container narrow text-center" style="margin-top: 50px;">
+    <div class="card">
+        <h1 style="color: #ef4444; font-size: 3rem; margin-bottom: 8px;">403</h1>
+        <h2>Access Denied</h2>
+        <p style="color: #64748b; margin-top: 10px;">Bạn không có vai trò Quản trị viên (ROLE_ADMIN) để thực hiện thao tác này.</p>
+        <div style="margin-top: 24px;">
+            <a class="btn primary" th:href="@{/}">Về Trang chủ</a>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

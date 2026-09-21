@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký tài khoản - IOTSTAR SHOP</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <div class="brand-title">IOTSTAR SHOP</div>
+    <h2>Đăng ký tài khoản</h2>
+    <p class="subtitle">Hệ thống sẽ gửi mã OTP qua Email để kích hoạt tài khoản</p>
+
+    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/register}" th:object="${registerDTO}" method="post">
+        <div class="form-group">
+            <label for="username">Tên đăng nhập (*)</label>
+            <input type="text" id="username" th:field="*{username}" required placeholder="Ví dụ: nguyenvana">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email (*)</label>
+            <input type="email" id="email" th:field="*{email}" required placeholder="email@gmail.com">
+        </div>
+
+        <div class="form-group">
+            <label for="fullName">Họ và tên (*)</label>
+            <input type="text" id="fullName" th:field="*{fullName}" required placeholder="Nguyễn Văn A">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mật khẩu (*)</label>
+            <input type="password" id="password" th:field="*{password}" required placeholder="Tối thiểu 6 ký tự">
+        </div>
+
+        <button class="btn primary full" type="submit">Đăng ký & Nhận mã OTP</button>
+    </form>
+
+    <div class="auth-links">
+        <span>Đã có tài khoản?</span> <a th:href="@{/login}">Đăng nhập ngay</a>
+    </div>
+
+    <div class="auth-footer">
+        <a th:href="@{/}">Quay về Trang chủ</a>
+    </div>
+</div>
+
+</body>
+</html>
