@@ -1,97 +1,69 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Quản lý User - IOTSTAR SHOP</title>
-    <link rel="stylesheet" th:href="@{/css/app.css}">
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/layout :: head('Users')}"></head>
 <body>
 
-<header th:replace="~{fragments/header :: header}"></header>
+<div th:replace="~{layouts/layout :: page(~{::main})}">
+<main>
+    <h1>Quản lý Users</h1>
+    <div th:if="${success}" class="alert success" th:text="${success}"></div>
 
-<main class="container">
-    <div class="page-title">
-        <div>
-            <h1>Quản lý Danh sách Người dùng</h1>
-            <p class="subtitle">Đếm số lượng Product của từng User, tìm kiếm và phân trang</p>
-        </div>
-        <div>
-            <a class="btn primary" th:href="@{/users/create}">+ Thêm Người dùng mới</a>
-        </div>
-    </div>
-
-    <div class="alert success" th:if="${success}" th:text="${success}"></div>
-    <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-
-    <div class="panel" style="margin-bottom: 20px;">
-        <form th:action="@{/users}" method="get" class="search-form">
-            <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm theo username, email, họ tên..." class="search-input">
-            <button type="submit" class="btn primary">Tìm kiếm</button>
-            <a th:href="@{/users}" class="btn secondary">Làm mới</a>
+    <div class="toolbar">
+        <form th:action="@{/users}" method="get">
+            <input name="keyword" th:value="${keyword}" placeholder="Username, email, họ tên...">
+            <input type="hidden" name="size" th:value="${size}">
+            <button class="button">Tìm kiếm</button>
         </form>
+        <a class="button" th:href="@{/users/create}">+ Thêm User</a>
     </div>
 
-    <div class="panel">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ảnh</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Họ và tên</th>
-                    <th>Vai trò</th>
-                    <th>Số Products</th>
-                    <th>Trạng thái</th>
-                    <th style="text-align: right;">Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="u : ${users.content}">
-                    <td th:text="'#' + ${u.id}">#1</td>
-                    <td>
-                        <img th:src="${u.images != null and !#strings.isEmpty(u.images) ? u.images : 'https://placehold.co/100x100?text=U'}"
-                             alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
-                    </td>
-                    <td class="fw-bold" th:text="${u.username}">admin</td>
-                    <td th:text="${u.email}">admin@iotstar.vn</td>
-                    <td th:text="${u.fullName}">Nguyễn Văn A</td>
-                    <td><span class="role-badge" th:text="${u.roleName}">ROLE_USER</span></td>
-                    <td>
-                        <span class="product-badge" th:text="${u.productCount} + ' sản phẩm'">0 sản phẩm</span>
-                    </td>
-                    <td>
-                        <span th:if="${u.enabled}" style="color: #16a34a; font-weight: 600;">Đã kích hoạt</span>
-                        <span th:unless="${u.enabled}" style="color: #dc2626; font-weight: 600;">Chưa kích hoạt</span>
-                    </td>
-                    <td style="text-align: right;">
-                        <a class="btn-action edit" th:href="@{/users/edit/{id}(id=${u.id})}">Sửa</a>
-                        <form th:action="@{/users/delete/{id}(id=${u.id})}" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa User này?');">
-                            <button type="submit" class="btn-action delete">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${users.empty}">
-                    <td colspan="9" style="text-align: center; color: #94a3b8; padding: 30px;">Không tìm thấy người dùng nào.</td>
-                </tr>
-            </tbody>
-        </table>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Họ tên</th>
+                <th>Role</th>
+                <th>Enabled</th>
+                <th>Products</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="u : ${users.content}">
+                <td th:text="${u.id}"></td>
+                <td th:text="${u.username}"></td>
+                <td th:text="${u.email}"></td>
+                <td th:text="${u.fullName}"></td>
+                <td th:text="${u.roleName}"></td>
+                <td th:text="${u.enabled ? 'ACTIVE' : 'INACTIVE'}"></td>
+                <td th:text="${u.productCount}"></td>
+                <td class="actions">
+                    <a th:href="@{/users/edit/{id}(id=${u.id})}">Edit</a>
+                    <form th:action="@{/users/delete/{id}(id=${u.id})}" method="post" style="display:inline;" onsubmit="return confirm('Xóa user này?')">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button class="danger-link">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${users.empty}">
+                <td colspan="8">Không có dữ liệu.</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <div class="pagination-wrapper" th:if="${totalPages > 1}">
-            <span th:text="'Hiển thị trang ' + (${currentPage + 1}) + ' / ' + ${totalPages} + ' (Tổng ' + ${totalElements} + ' users)'"></span>
-            <div class="pagination">
-                <a th:if="${users.hasPrevious()}" th:href="@{/users(page=${currentPage - 1}, keyword=${keyword}, size=${size})}">&laquo; Trang trước</a>
-                <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="@{/users(page=${i}, keyword=${keyword}, size=${size})}"
-                       th:text="${i + 1}"
-                       th:classappend="${i == currentPage} ? 'active' : ''"></a>
-                </span>
-                <a th:if="${users.hasNext()}" th:href="@{/users(page=${currentPage + 1}, keyword=${keyword}, size=${size})}">Trang sau &raquo;</a>
-            </div>
-        </div>
+    <div class="pagination" th:if="${totalPages > 1}">
+        <a th:if="${users.hasPrevious()}" th:href="@{/users(page=${users.number-1},size=${size},keyword=${keyword})}">&laquo;</a>
+        <span th:each="i : ${#numbers.sequence(0, users.totalPages > 0 ? users.totalPages - 1 : 0)}">
+            <a th:classappend="${i == users.number ? 'active' : ''}"
+               th:href="@{/users(page=${i},size=${size},keyword=${keyword})}"
+               th:text="${i+1}"></a>
+        </span>
+        <a th:if="${users.hasNext()}" th:href="@{/users(page=${users.number+1},size=${size},keyword=${keyword})}">&raquo;</a>
     </div>
 </main>
+</div>
 
 </body>
 </html>
