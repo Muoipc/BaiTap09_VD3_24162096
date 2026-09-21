@@ -10,11 +10,10 @@
 
 <div class="auth-card">
     <div class="brand-title">IOTSTAR SHOP</div>
-    <h2>Đăng nhập Hệ thống</h2>
-    <p class="subtitle">Bài tập 09 - Ví dụ 3 (Spring Boot Security + OTP Mail + CRUD)</p>
+    <h2>Đăng nhập</h2>
 
     <div class="alert error" th:if="${param.error}">
-        Tên đăng nhập hoặc mật khẩu không chính xác, hoặc tài khoản chưa kích hoạt qua OTP.
+        Tên đăng nhập hoặc mật khẩu không chính xác, hoặc tài khoản chưa kích hoạt.
     </div>
 
     <div class="alert success" th:if="${param.verified}">
@@ -26,18 +25,18 @@
     </div>
 
     <div class="alert success" th:if="${param.logout}">
-        Bạn đã đăng xuất khỏi hệ thống.
+        Bạn đã đăng xuất thành công.
     </div>
 
     <form th:action="@{/login}" method="post">
         <div class="form-group">
             <label for="username">Tên đăng nhập / Email</label>
-            <input type="text" id="username" name="username" required autofocus placeholder="phucadmin hoặc vanb">
+            <input type="text" id="username" name="username" required autofocus>
         </div>
 
         <div class="form-group">
             <label for="password">Mật khẩu</label>
-            <input type="password" id="password" name="password" required placeholder="123456">
+            <input type="password" id="password" name="password" required>
         </div>
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
@@ -46,18 +45,12 @@
     </form>
 
     <div class="auth-links">
-        <a th:href="@{/register}">Tạo tài khoản mới (Xác thực OTP)</a> · 
+        <a th:href="@{/register}">Đăng ký tài khoản</a> · 
         <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
     </div>
 
-    <div class="demo-box">
-        <strong>Tài khoản thử nghiệm sẵn:</strong>
-        <div>Admin: <code>phucadmin</code> (Pass: <code>123456</code>)</div>
-        <div>User: <code>vanb</code> (Pass: <code>123456</code>)</div>
-    </div>
-
     <div class="auth-footer">
-        <a th:href="@{/}">Quay về Trang chủ</a>
+        <a th:href="@{/}">Về trang chủ</a>
     </div>
 </div>
 
